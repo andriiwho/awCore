@@ -126,7 +126,7 @@ namespace aw::core {
             return m_InlineCount > 0;
         }
     };
-    
+
     template<typename T, usize BufferSize>
     class StaticAllocator {
     public:

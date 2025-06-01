@@ -3,8 +3,11 @@
 #include <cstdint>
 #include <concepts>
 
+template<typename T>
+concept Arithmetic = std::is_arithmetic_v<T>;
+
 #define AW_CORE_DEFINE_PRIMITIVE_CONVERTER(type) \
-    inline constexpr type to_##type(std::integral auto value) { return static_cast<type>(value); }
+    inline constexpr type to_##type(Arithmetic auto value) { return static_cast<type>(value); }
 
 namespace aw::core {
     using i8 = std::int8_t;

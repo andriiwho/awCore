@@ -5,3 +5,4 @@
 
 #include "memory/memalloc.h"
 #include "memory/allocators.h"
+#include "memory/paged_memory_pool.h"
