@@ -206,3 +206,14 @@ inline constexpr bool CLEAR_EMPTY_PAGES = false;
 #else
 inline constexpr bool CLEAR_EMPTY_PAGES = true;
 #endif
+
+inline void *operator new(const std::size_t size, aw::core::PagedMemoryPool &pool) {
+    return pool.allocate_memory(aw::core::Bytes(size));
+}
+
+inline void operator delete(void *ptr, aw::core::PagedMemoryPool &pool) {
+    pool.free_memory(ptr);
+}
+
+#define aw_new new(aw::core::PagedMemoryPool::get())
+#define aw_delete(val) std::destroy_at(val); aw::core::PagedMemoryPool::get().free_memory(val)

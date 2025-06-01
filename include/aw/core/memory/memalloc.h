@@ -11,13 +11,4 @@ namespace aw::core {
 
     /** Returns the size of the allocation */
     extern usize get_allocation_size(void* ptr);
-
-    /** Returns the next allocation in the linked list */
-    extern void* get_next_allocation(void* ptr);
-
-    /** Returns the previous allocation in the linked list */
-    extern void* get_prev_allocation(void* ptr);
-
-    /** Returns the number of allocations */
-    extern usize get_allocation_count();
 }
