@@ -50,4 +50,29 @@ TEST(aw_core_tests, test_strings) {
     EXPECT_EQ(str.is_empty(), false);
     EXPECT_EQ(str.get_front(), 'H');
     EXPECT_EQ(str.get_back(), '!');
+
+    String str_copied = str;
+    EXPECT_EQ(str_copied.get_length(), 12);
+    EXPECT_STREQ(*str_copied, "Hello World!");
+
+    const String str_moved = std::move(str_copied);
+    EXPECT_EQ(str_moved.get_length(), 12);
+    EXPECT_STREQ(*str_moved, "Hello World!");
+    EXPECT_EQ(str_copied.get_length(), 0);
+    EXPECT_EQ(str_copied.get_capacity(), 0);
+    EXPECT_EQ(str_copied.get_allocated_size(), 0);
+    EXPECT_EQ(str_copied.is_empty(), true);
+}
+
+TEST(aw_core_tests, test_string_view) {
+    using namespace aw::core;
+
+    const String str = "Hello World!";
+    const StringView str_view = str;
+    EXPECT_EQ(str_view.get_length(), 12);
+    EXPECT_STREQ(*str_view, "Hello World!");
+    EXPECT_EQ(str_view.get_size(), 13 * sizeof(char));
+    EXPECT_EQ(str_view.is_empty(), false);
+    EXPECT_EQ(str_view.get_front(), 'H');
+    EXPECT_EQ(str_view.get_back(), '!');
 }

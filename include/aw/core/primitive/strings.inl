@@ -1,6 +1,8 @@
 #pragma once
 #include <algorithm>
 
+#include "strings.h"
+
 namespace aw::core {
     template<typename CharType, typename Traits, typename Allocator>
     StringTemplate<CharType, Traits, Allocator>::StringTemplate(const CharType *str, Allocator allocator)
@@ -66,5 +68,8 @@ namespace aw::core {
         m_Size = 0;
     }
 
+#ifndef AW_NO_STRING_ALIASES
     using String = StringTemplate<char>;
+    using StringView = StringViewTemplate<char>;
+#endif
 }
