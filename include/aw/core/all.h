@@ -13,3 +13,4 @@
 #include "aw/core/math/vector2.h"
 #include "aw/core/math/vector3.h"
 #include "aw/core/math/vector4.h"
+#include "aw/core/math/matrix.h"

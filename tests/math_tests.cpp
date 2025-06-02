@@ -102,3 +102,93 @@ TEST(MathTest, BasicOperations)
 	EXPECT_FLOAT_EQ(Math::tan(Math::PI / 4.0f), 1.0f);
 	EXPECT_FLOAT_EQ(Math::lerp(0.0f, 1.0f, 0.5f), 0.5f);
 }
+
+TEST(MatrixTest, Matrix4Transpose)
+{
+	constexpr Matrix4f m(
+		1.0f, 2.0f, 3.0f, 4.0f,
+		5.0f, 6.0f, 7.0f, 8.0f,
+		9.0f, 10.0f, 11.0f, 12.0f,
+		13.0f, 14.0f, 15.0f, 16.0f);
+
+	constexpr Matrix4f m_t = m.transpose();
+	constexpr Matrix4f m_t_expected(
+		1.0f, 5.0f, 9.0f, 13.0f,
+		2.0f, 6.0f, 10.0f, 14.0f,
+		3.0f, 7.0f, 11.0f, 15.0f,
+		4.0f, 8.0f, 12.0f, 16.0f);
+	EXPECT_EQ(m_t, m_t_expected);
+}
+
+TEST(MatrixTest, Matrix4Inverse)
+{
+	constexpr Matrix4f m(
+		1, 2, 3, 0,
+		0, 1, 4, 0,
+		5, 6, 0, 0,
+		0, 0, 0, 1);
+
+	constexpr Matrix4f m_inv = m.inverse();
+	EXPECT_TRUE((m * m_inv).is_identity());
+
+	constexpr Vector4f v(1, 2, 3, 1);
+	constexpr Vector4f v_transformed = m * v;
+	EXPECT_EQ(v_transformed, Vector4f(14, 14, 17, 1));
+}
+
+TEST(MatrixTest, Matrix3Transpose)
+{
+	constexpr Matrix3f m(
+		1.0f, 2.0f, 3.0f,
+		4.0f, 5.0f, 6.0f,
+		7.0f, 8.0f, 9.0f);
+
+	constexpr Matrix3f m_t = m.transpose();
+	constexpr Matrix3f m_t_expected(
+		1.0f, 4.0f, 7.0f,
+		2.0f, 5.0f, 8.0f,
+		3.0f, 6.0f, 9.0f);
+	EXPECT_EQ(m_t, m_t_expected);
+}
+
+TEST(MatrixTest, Matrix3Inverse)
+{
+	constexpr Matrix3f m(
+		1, 2, 3,
+		0, 1, 4,
+		5, 6, 0);
+
+	constexpr Matrix3f m_inv = m.inverse();
+	EXPECT_TRUE((m * m_inv).is_identity());
+
+	constexpr Vector3f v(1, 2, 3);
+	constexpr Vector3f v_transformed = m * v;
+	EXPECT_EQ(v_transformed, Vector3f(14, 14, 17));
+}
+
+TEST(MatrixTest, Matrix2Transpose)
+{
+	constexpr Matrix2f m(
+		1.0f, 2.0f,
+		3.0f, 4.0f);
+
+	constexpr Matrix2f m_t = m.transpose();
+	constexpr Matrix2f m_t_expected(
+		1.0f, 3.0f,
+		2.0f, 4.0f);
+	EXPECT_EQ(m_t, m_t_expected);
+}
+
+TEST(MatrixTest, Matrix2Inverse)
+{
+	constexpr Matrix2f m(
+		4, 7,
+		2, 6);
+
+	constexpr Matrix2f m_inv = m.inverse();
+	EXPECT_TRUE((m * m_inv).is_identity());
+
+	constexpr Vector2f v(1, 2);
+	constexpr Vector2f v_transformed = m * v;
+	EXPECT_EQ(v_transformed, Vector2f(18, 14));
+}
