@@ -1,6 +1,7 @@
 #include "aw/core/memory/paged_memory_pool.h"
 
 #include <cassert>
+#include <cstring>
 #include <mutex>
 
 namespace aw::core
@@ -223,7 +224,7 @@ namespace aw::core
 			capacity = to_u32(CAPACITY_INCREMENT * capacity);
 			const auto new_block = static_cast<u32*>(malloc(capacity * sizeof(u32)));
 			assert(new_block);
-			memcpy(new_block, data, old_capacity * sizeof(u32));
+			std::memcpy(new_block, data, old_capacity * sizeof(u32));
 			free(data);
 			data = new_block;
 		}

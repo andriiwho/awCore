@@ -4,6 +4,7 @@
 
 #include <array>
 #include <shared_mutex>
+#include <atomic>
 
 namespace aw::core
 {
