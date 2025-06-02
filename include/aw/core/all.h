@@ -1,5 +1,7 @@
 #pragma once
 
+#include "aw/core/misc/aw_core_checks.h"
+
 #include "primitive/numbers.h"
 #include "primitive/container_aliases.h"
 #include "primitive/defer.h"

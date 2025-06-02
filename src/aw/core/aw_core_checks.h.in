@@ -1,0 +1,8 @@
+#pragma once
+
+#cmakedefine AW_HAS_SSE
+#cmakedefine AW_HAS_SSE2
+#cmakedefine AW_HAS_SSE_FP
+#cmakedefine AW_HAS_SSE_MMX
+#cmakedefine AW_HAS_AVX
+#cmakedefine AW_HAS_AVX2
