@@ -8,7 +8,7 @@
 namespace aw::core
 {
 	template <std::floating_point T>
-	class Vector4Template
+	struct Vector4Template
 	{
 		using ComponentType = T;
 		using VectorType = Vector4Template<T>;
@@ -58,6 +58,15 @@ namespace aw::core
 			, z(xyz.z)
 			, w(w)
 		{
+		}
+
+		constexpr Vector4Template swizzle(const SwizzleIndex idx, const SwizzleIndex idy, const SwizzleIndex idz, const SwizzleIndex idw) const noexcept
+		{
+			return Vector4Template(
+				this->operator[](idx),
+				this->operator[](idy),
+				this->operator[](idz),
+				this->operator[](idw));
 		}
 
 		constexpr Vector3Template<ComponentType> xyz() const noexcept { return Vector3Template<ComponentType>(x, y, z); }
@@ -188,12 +197,12 @@ namespace aw::core
 			return VectorType(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs, lhs.w / rhs);
 		}
 
-		constexpr bool operator==(const VectorType& lhs, const VectorType& rhs)
+		constexpr bool operator==(const VectorType& rhs) const
 		{
 			return Math::is_nearly_equal(x, rhs.x) && Math::is_nearly_equal(y, rhs.y) && Math::is_nearly_equal(z, rhs.z) && Math::is_nearly_equal(w, rhs.w);
 		}
 
-		constexpr bool operator!=(const VectorType& lhs, const VectorType& rhs)
+		friend constexpr bool operator!=(const VectorType& lhs, const VectorType& rhs)
 		{
 			return !(lhs == rhs);
 		}

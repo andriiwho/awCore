@@ -1,6 +1,7 @@
 #pragma once
 
 #include "aw/core/primitive/numbers.h"
+#include "aw/core/math/math.h"
 
 #include <array>
 #include <shared_mutex>
@@ -11,51 +12,6 @@ namespace aw::core
 #define AW_PASTE(a, b) a##b
 #define AW_PASTE2(a, b) AW_PASTE(a, b)
 #define AW_PASTE3(a, b, c) AW_PASTE2(AW_PASTE2(a, b), c);
-
-	namespace detail
-	{
-		/** 64-bit log table */
-		inline constexpr u64 log2_table_64[64]{
-			63, 0, 58, 1, 59, 47, 53, 2,
-			60, 39, 48, 27, 54, 33, 42, 3,
-			61, 51, 37, 40, 49, 18, 28, 20,
-			55, 30, 34, 11, 43, 14, 22, 4,
-			62, 57, 46, 52, 38, 26, 32, 41,
-			50, 36, 17, 19, 29, 10, 13, 21,
-			56, 45, 25, 31, 35, 16, 9, 12,
-			44, 24, 15, 8, 23, 7, 6, 5
-		};
-
-		inline constexpr u32 log2_table_32[32]{
-			0, 9, 1, 10, 13, 21, 2, 29,
-			11, 14, 16, 18, 22, 25, 3, 30,
-			8, 12, 20, 28, 15, 17, 24, 7,
-			19, 27, 23, 6, 26, 5, 4, 31
-		};
-	} // namespace detail
-
-	constexpr u64 fast_log2(const u64 value)
-	{
-		u64 mod_value = value;
-		mod_value |= mod_value >> 1;
-		mod_value |= mod_value >> 2;
-		mod_value |= mod_value >> 4;
-		mod_value |= mod_value >> 8;
-		mod_value |= mod_value >> 16;
-		mod_value |= mod_value >> 32;
-		return detail::log2_table_64[to_u64((mod_value - (mod_value >> 1)) * 0x07edd5e59a4e28c2) >> 58];
-	}
-
-	constexpr u32 fast_log2(const u32 value)
-	{
-		u32 mod_value = value;
-		mod_value |= mod_value >> 1;
-		mod_value |= mod_value >> 2;
-		mod_value |= mod_value >> 4;
-		mod_value |= mod_value >> 8;
-		mod_value |= mod_value >> 16;
-		return detail::log2_table_32[to_u32(mod_value * 0x07c4acdd) >> 27];
-	}
 } // namespace aw::core
 
 namespace aw::core
@@ -112,21 +68,6 @@ namespace aw::core
 
 		u64 value{};
 	};
-
-	constexpr u64 size_align_to_pow2(Bytes value)
-	{
-		u64 count = 0;
-		if (value && !(value & (value - 1)))
-			return value;
-
-		while (value != 0)
-		{
-			value.value >>= 1;
-			count++;
-		}
-
-		return 1ull << count;
-	}
 
 	struct AllocationHeader
 	{

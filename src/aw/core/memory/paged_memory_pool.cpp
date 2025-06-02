@@ -148,8 +148,8 @@ namespace aw::core
 		// We shouldn't get here if everything is correct
 		assert(allocation_size <= DEFAULT_PAGE_SIZE);
 
-		const Bytes aligned_size = size_align_to_pow2(allocation_size + sizeof(AllocationHeader));
-		const u64	page_index = fast_log2(aligned_size);
+		const Bytes aligned_size = Math::align_to_pow2(allocation_size + sizeof(AllocationHeader));
+		const u64	page_index = Math::fast_log2(aligned_size);
 		// Check if a page tree at the index exists, if not, create it
 		MemoryPage*&	 found_page_tree = m_PageTrees.at(page_index);
 		std::shared_lock read_lock(m_PageTreesMutex);

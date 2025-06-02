@@ -2,12 +2,12 @@
 
 #include "aw/core/all.h"
 
-TEST(aw_core_tests, test_tests_are_working)
+TEST(CoreTests, TestBasicTest)
 {
 	EXPECT_EQ(69, 69);
 }
 
-TEST(aw_core_tests, test_memalloc_alloc_free)
+TEST(CoreTests, TestMemAllocFree)
 {
 	void* allocation = aw::core::allocate_memory(100);
 	defer[allocation]
@@ -17,10 +17,10 @@ TEST(aw_core_tests, test_memalloc_alloc_free)
 	EXPECT_EQ(aw::core::get_allocation_size(allocation), 100);
 }
 
-TEST(aw_core_tests, test_default_alloc)
+TEST(CoreTests, TestDefaultAllocator)
 {
 	aw::core::DefaultAllocator<int> alloc;
-	int*							a = alloc.allocate(10);
+	int* a = alloc.allocate(10);
 	defer[a, &alloc]
 	{
 		alloc.deallocate(a, 10);
@@ -28,7 +28,7 @@ TEST(aw_core_tests, test_default_alloc)
 	EXPECT_EQ(aw::core::get_allocation_size(a), 10 * sizeof(int));
 }
 
-TEST(aw_core_tests, test_aw_new_delete)
+TEST(CoreTests, TestAWNewDelete)
 {
 	const auto a = aw_new int(35);
 	defer[a]

@@ -7,9 +7,23 @@
 #include <cmath>
 #include <concepts>
 #include <thread>
+#include <array>
 
 namespace aw::core
 {
+	enum SwizzleIndex : u8
+	{
+		SWIZZLE_INDEX_X = 0,
+		SWIZZLE_INDEX_Y = 1,
+		SWIZZLE_INDEX_Z = 2,
+		SWIZZLE_INDEX_W = 3,
+
+		SWIZZLE_INDEX_R = 0,
+		SWIZZLE_INDEX_G = 1,
+		SWIZZLE_INDEX_B = 2,
+		SWIZZLE_INDEX_A = 3,
+	};
+
 	struct Random
 	{
 		using State = std::array<u64, 4>;
@@ -136,6 +150,25 @@ namespace aw::core
 
 			return guess;
 		}
+
+		/** 64-bit log table */
+		inline constexpr u64 log2_table_64[64]{
+			63, 0, 58, 1, 59, 47, 53, 2,
+			60, 39, 48, 27, 54, 33, 42, 3,
+			61, 51, 37, 40, 49, 18, 28, 20,
+			55, 30, 34, 11, 43, 14, 22, 4,
+			62, 57, 46, 52, 38, 26, 32, 41,
+			50, 36, 17, 19, 29, 10, 13, 21,
+			56, 45, 25, 31, 35, 16, 9, 12,
+			44, 24, 15, 8, 23, 7, 6, 5
+		};
+
+		inline constexpr u32 log2_table_32[32]{
+			0, 9, 1, 10, 13, 21, 2, 29,
+			11, 14, 16, 18, 22, 25, 3, 30,
+			8, 12, 20, 28, 15, 17, 24, 7,
+			19, 27, 23, 6, 26, 5, 4, 31
+		};
 	} // namespace detail
 
 	struct Math
@@ -310,6 +343,45 @@ namespace aw::core
 		static constexpr bool is_nearly_zero(T value)
 		{
 			return abs(value) < ((sizeof(T) == sizeof(f32)) ? EPSILON : EPSILON64);
+		}
+
+
+		static constexpr u64 fast_log2(const u64 value)
+		{
+			u64 mod_value = value;
+			mod_value |= mod_value >> 1;
+			mod_value |= mod_value >> 2;
+			mod_value |= mod_value >> 4;
+			mod_value |= mod_value >> 8;
+			mod_value |= mod_value >> 16;
+			mod_value |= mod_value >> 32;
+			return detail::log2_table_64[to_u64((mod_value - (mod_value >> 1)) * 0x07edd5e59a4e28c2) >> 58];
+		}
+
+		static constexpr u32 fast_log2(const u32 value)
+		{
+			u32 mod_value = value;
+			mod_value |= mod_value >> 1;
+			mod_value |= mod_value >> 2;
+			mod_value |= mod_value >> 4;
+			mod_value |= mod_value >> 8;
+			mod_value |= mod_value >> 16;
+			return detail::log2_table_32[to_u32(mod_value * 0x07c4acdd) >> 27];
+		}
+
+		static constexpr u64 align_to_pow2(u64 value)
+		{
+			u64 count = 0;
+			if (value && !(value & (value - 1)))
+				return value;
+
+			while (value != 0)
+			{
+				value >>= 1;
+				count++;
+			}
+
+			return 1ull << count;
 		}
 	};
 } // namespace aw::core

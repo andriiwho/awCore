@@ -55,7 +55,16 @@ namespace aw::core
 			: x(xy.x)
 			, y(xy.y)
 			, z(z)
-		{}
+		{
+		}
+
+		constexpr Vector3Template swizzle(const SwizzleIndex idx, const SwizzleIndex idy, const SwizzleIndex idz) const noexcept
+		{
+			return Vector3Template(
+				data()[idx],
+				data()[idy],
+				data()[idz]);
+		}
 
 		constexpr Vector2Template<ComponentType> xy() const noexcept { return Vector2Template<ComponentType>(x, y); }
 
@@ -203,7 +212,7 @@ namespace aw::core
 			return VectorType(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 		}
 
-		bool operator==(const VectorType& rhs) const
+		constexpr bool operator==(const VectorType& rhs) const
 		{
 			return Math::is_nearly_equal(x, rhs.x) && Math::is_nearly_equal(y, rhs.y) && Math::is_nearly_equal(z, rhs.z);
 		}
