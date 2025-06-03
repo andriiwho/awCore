@@ -16,3 +16,7 @@
 #include "aw/core/math/vector3.h"
 #include "aw/core/math/vector4.h"
 #include "aw/core/math/matrix.h"
+
+#include "aw/core/async/thread_pool.h"
+#include "aw/core/async/thread_worker.h"
+#include "aw/core/async/async.h"

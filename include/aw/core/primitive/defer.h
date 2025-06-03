@@ -1,5 +1,8 @@
 #pragma once
+
 #include <utility>
+
+#include "macros.h"
 
 namespace aw::core
 {
@@ -39,6 +42,4 @@ namespace aw::core
 	}
 } // namespace aw::core
 
-#define AW_DEFER_CONCAT_IMPL(x, y) x##y
-#define AW_DEFER_CONCAT(x, y) AW_DEFER_CONCAT_IMPL(x, y)
-#define defer aw::core::defer_scope_guard AW_DEFER_CONCAT(defer_, __LINE__) =
+#define defer aw::core::defer_scope_guard AW_CONCAT(defer_, __LINE__) =
