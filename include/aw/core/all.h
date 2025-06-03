@@ -5,6 +5,7 @@
 #include "primitive/numbers.h"
 #include "primitive/container_aliases.h"
 #include "primitive/defer.h"
+#include "primitive/macros.h"
 
 #include "memory/memalloc.h"
 #include "memory/allocators.h"
