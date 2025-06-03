@@ -43,13 +43,13 @@ From now on, I'll be using this library to build my projects instead of reinvent
 
 To build just clone this repository (or add it as a submodule) and do ```add_subdirectory(awCore)``` in your CMakeLists.txt.
 
-To use it you then can include the 'all.h' or separate headers as you wish.
+To use it, you then can include the 'all.h' or separate headers as you wish.
 ```C++
     #include <aw/core/all.h>    // This will include all of the headers. (You can add it to your pch to build it faster)
 ```
 or
 ```C++
-    #include <aw/core/async/thread_pool.h> // If you want to use ony the memory pool class.
+    #include <aw/core/async/thread_pool.h> // If you want to use only the memory pool class.
 ```
 
 If you don't want to build and run tests, run this command in your CMakeLists before adding it as a subdirectory:
@@ -73,4 +73,4 @@ Q: Why C++23? A: Because we love living on the edge! If you want C++20, it's pro
 Q: Can I use this in my project? A: Absolutely! That's what it's here for!
 
 ## 📄 License
-This project is licensed under the MIT License - see the LICENSE file for details
+This project is licensed under the MIT License: see the LICENSE file for details
