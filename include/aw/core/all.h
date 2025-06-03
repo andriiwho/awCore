@@ -11,7 +11,6 @@
 #include "memory/paged_memory_pool.h"
 
 #include "aw/core/math/math.h"
-
 #include "aw/core/math/vector2.h"
 #include "aw/core/math/vector3.h"
 #include "aw/core/math/vector4.h"
@@ -20,3 +19,4 @@
 #include "aw/core/async/thread_pool.h"
 #include "aw/core/async/thread_worker.h"
 #include "aw/core/async/async.h"
+#include "aw/core/async/task_graph.h"

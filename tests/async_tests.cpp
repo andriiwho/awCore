@@ -1,5 +1,3 @@
-#pragma once
-
 #include "aw/core/async/async.h"
 
 #include <aw/core/all.h>
@@ -56,7 +54,6 @@ TEST(ThreadPoolTests, TestGlobalThreadPool)
 TEST(AsyncTests, TestAsyncWait)
 {
 	aw_init_global_thread_pool_scoped();
-
 
 	try
 	{
@@ -124,4 +121,59 @@ TEST(ThreadWorkerTests, TestThreadWorker)
 
 	EXPECT_EQ(value, 69);
 	EXPECT_EQ(value2, 69);
+}
+
+TEST(TaskGraphTests, TestTaskGraph)
+{
+	aw_init_global_thread_pool_scoped();
+
+	TaskGraph graph;
+
+	Vector<usize> v;
+	std::mutex v_mutex;
+
+	auto* t1 = graph.add_task([&] { v.push_back(0); });
+	auto* t2 = graph.add_task([&] { v.push_back(1); });
+	auto* t3 = graph.add_task([&] { v.push_back(2); });
+
+	t1->then(t2)->then(t3);
+
+	graph.execute(g_global_thread_pool);
+	graph.wait_all();
+
+	EXPECT_EQ(v.size(), 3);
+
+	usize i = 0;
+	for (const usize x : v)
+	{
+		EXPECT_EQ(x, i++);
+	}
+}
+
+TEST(TaskGraphTests, TestTaskGraphThen)
+{
+	aw_init_global_thread_pool_scoped();
+
+	TaskGraph graph;
+
+	Vector<usize> v;
+	std::mutex v_mutex;
+
+	const auto last_task = graph.add_task([&] { v.push_back(0); })
+		->then([&] { v.push_back(1); })
+		->then([&] { v.push_back(2); });
+
+	const auto new_task = graph.add_task([&] { v.push_back(3); });
+	last_task->then(new_task);
+
+	graph.execute(g_global_thread_pool);
+	graph.wait_all();
+
+	EXPECT_EQ(v.size(), 4);
+
+	usize i = 0;
+	for (const usize x : v)
+	{
+		EXPECT_EQ(x, i++);
+	}
 }
