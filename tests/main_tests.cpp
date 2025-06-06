@@ -37,3 +37,20 @@ TEST(CoreTests, TestAWNewDelete)
 	};
 	EXPECT_EQ(*a, 35);
 }
+
+TEST(CoreTests, TestRefCounted)
+{
+	class S : public aw::core::IntrusiveRefCounted
+	{
+
+	};
+
+	try
+	{
+		aw::core::RefPtr<S> s = aw::core::new_ref<S>();
+	}
+	catch (const std::exception& e)
+	{
+		FAIL() << e.what() << std::endl;
+	}
+}

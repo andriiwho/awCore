@@ -10,6 +10,7 @@
 #include "memory/memalloc.h"
 #include "memory/allocators.h"
 #include "memory/paged_memory_pool.h"
+#include "memory/intrusive_ref_counted.h"
 
 #include "aw/core/math/math.h"
 #include "aw/core/math/vector2.h"
