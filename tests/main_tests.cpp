@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 
 #include "aw/core/all.h"
+#include "aw/core/primitive/enum_flags.h"
+
+using namespace aw::core;
 
 TEST(CoreTests, TestBasicTest)
 {
@@ -53,4 +56,39 @@ TEST(CoreTests, TestRefCounted)
 	{
 		FAIL() << e.what() << std::endl;
 	}
+}
+
+
+enum class Flags : aw::core::u32
+{
+	a = 1 << 0,
+	b = 1 << 1,
+	c = 1 << 2,
+	d = 1 << 3,
+	e = 1 << 4,
+	f = 1 << 5,
+	g = 1 << 6,
+	h = 1 << 7,
+	i = 1 << 8,
+	j = 1 << 9,
+};
+aw_enum_flags(Flags);
+
+TEST(CoreTests, TestEnumFlags)
+{
+	EnumMask<Flags> mask = Flags::a | Flags::b;
+	EXPECT_TRUE(mask.contains(Flags::a));
+	EXPECT_TRUE(mask.contains(Flags::b));
+
+	mask.remove(Flags::a);
+	EXPECT_FALSE(mask.contains(Flags::a));
+
+	mask |= Flags::d;
+	EXPECT_EQ(mask, Flags::b | Flags::d);
+
+	mask |= Flags::e;
+	EXPECT_TRUE(mask.contains(Flags::e));
+	
+	mask &= ~Flags::e;
+	EXPECT_FALSE(mask.contains(Flags::e));
 }
