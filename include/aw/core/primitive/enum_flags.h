@@ -63,26 +63,21 @@ namespace aw::core
 } // namespace aw::core
 
 #define aw_enum_flags(T)                                                             \
-	template <aw::core::ScopedEnum T>                                                \
 	constexpr aw::core::EnumMask<T> operator|(T a, T b) noexcept                     \
 	{                                                                                \
 		return aw::core::EnumMask<T>(std::to_underlying(a) | std::to_underlying(b)); \
 	}                                                                                \
-                                                                                     \
-	template <aw::core::ScopedEnum T>                                                \
 	constexpr aw::core::EnumMask<T> operator&(T a, T b) noexcept                     \
 	{                                                                                \
 		return aw::core::EnumMask<T>(std::to_underlying(a) & std::to_underlying(b)); \
 	}                                                                                \
-	template <aw::core::ScopedEnum T>                                                \
 	constexpr aw::core::EnumMask<T> operator|(aw::core::EnumMask<T> a, T b) noexcept \
 	{                                                                                \
-		return { a.value | b };                                                      \
+		return { a.mask | b };                                                       \
 	}                                                                                \
-	template <aw::core::ScopedEnum T>                                                \
 	constexpr aw::core::EnumMask<T> operator|(T a, aw::core::EnumMask<T> b) noexcept \
 	{                                                                                \
-		return { a | b.value };                                                      \
+		return { a | b.mask };                                                       \
 	}                                                                                \
 	template <aw::core::ScopedEnum T>                                                \
 	constexpr T operator~(T value) noexcept                                          \
