@@ -70,7 +70,7 @@ namespace aw::core
 
 		RefPtr& operator=(const RefPtr& other) noexcept
 		{
-			if (this != &other)
+			if (this != std::addressof(other))
 			{
 				if (m_Ptr)
 					detail::fwd_ref_ptr_release(m_Ptr);
@@ -83,7 +83,7 @@ namespace aw::core
 
 		RefPtr& operator=(RefPtr&& other) noexcept
 		{
-			if (this != &other)
+			if (this != std::addressof(other))
 			{
 				if (m_Ptr)
 					detail::fwd_ref_ptr_release(m_Ptr);
@@ -96,7 +96,7 @@ namespace aw::core
 		template <typename U>
 		RefPtr& operator=(const RefPtr<U>& other) noexcept
 		{
-			if (this != &other)
+			if (this != std::addressof(other))
 			{
 				if (m_Ptr)
 					detail::fwd_ref_ptr_release(m_Ptr);
@@ -110,7 +110,7 @@ namespace aw::core
 		template <typename U>
 		RefPtr& operator=(RefPtr<U>&& other) noexcept
 		{
-			if (this != &other)
+			if (this != std::addressof(other))
 			{
 				if (m_Ptr)
 					detail::fwd_ref_ptr_release(m_Ptr);
