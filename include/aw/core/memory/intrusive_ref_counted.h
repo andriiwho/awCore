@@ -143,6 +143,8 @@ namespace aw::core
 
 		T** operator&() noexcept { return release_and_get_address(); }
 
+		operator T*() const noexcept { return m_Ptr; }
+
 	private:
 		template <typename U>
 		friend class RefPtr;
