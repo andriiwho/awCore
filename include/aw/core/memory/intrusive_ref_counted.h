@@ -134,6 +134,15 @@ namespace aw::core
 			m_Ptr = nullptr;
 		}
 
+		T** release_and_get_address() noexcept
+		{
+			if (m_Ptr)
+				detail::fwd_ref_ptr_release(m_Ptr);
+			return &m_Ptr;
+		}
+
+		T** operator&() noexcept { return release_and_get_address(); }
+
 	private:
 		template <typename U>
 		friend class RefPtr;
