@@ -15,8 +15,8 @@ namespace aw::core
 	public:
 		virtual ~IntrusiveRefCounted() = default;
 
-		void add_ref() const;
-		void release() const;
+		virtual void add_ref() const;
+		virtual void release() const;
 		usize get_ref_count() const;
 
 	private:
