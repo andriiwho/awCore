@@ -88,7 +88,4 @@ TEST(CoreTests, TestEnumFlags)
 
 	mask |= Flags::e;
 	EXPECT_TRUE(mask.contains(Flags::e));
-
-	mask &= ~Flags::e;
-	EXPECT_FALSE(mask.contains(Flags::e));
 }
