@@ -38,21 +38,23 @@ int main(const int argc, char** argv)
 	}
 
 	const auto awpk_path = document["awpk_path"];
-	std::cout << std::format("awpk_path: {}\n", awpk_path.get<std::string>());
-
 	for (const auto directory_mappings = document["directory_mappings"];
 		const auto& [key, value] : directory_mappings.items())
 	{
-		std::cout << std::format("{}: {}\n", key, value.get<std::string>());
 		vfs->map_path(key, value.get<std::string>());
-
 		for (const auto& file : vfs->list_files_in_mapped_directory(key))
 		{
 			awpk::add_file_to_awpk(archive, file, vfs->resolve_path(file));
 		}
 	}
 
-	awpk::write_to_disk(archive, "test.awpk");
-	return 0;
+	const std::string awpk_path_str = awpk_path.get<std::string>();
+	if (!std::filesystem::exists(std::filesystem::path(awpk_path_str).parent_path()))
+	{
+		std::filesystem::create_directory(std::filesystem::path(awpk_path_str).parent_path());
+	}
 
+	std::cout << "Writing awpk to " << awpk_path_str << std::endl;
+	awpk::write_to_disk(archive, awpk_path.get<std::string>());
+	return 0;
 }

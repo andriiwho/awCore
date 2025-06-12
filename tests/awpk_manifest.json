@@ -1,5 +1,5 @@
 {
-  "awpk_path": "test.awpk",
+  "awpk_path": "bin/test.awpk",
   "directory_mappings": {
     "test_assets://": "assets"
   }

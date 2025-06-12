@@ -30,5 +30,5 @@ endif ()
 
 if (AWCORE_BUILD_AWPK)
     run_awpk_for_target(awCoreTests)
-    add_custom_command(TARGET awCoreTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_LIST_DIR}/test.awpk $<TARGET_FILE_DIR:awCoreTests>/test.awpk)
+    add_custom_command(TARGET awCoreTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_LIST_DIR}/bin/test.awpk $<TARGET_FILE_DIR:awCoreTests>/bin/test.awpk)
 endif ()
