@@ -58,7 +58,7 @@ int main(const int argc, char** argv)
 	}
 
 	const std::string awpk_path_str = awpk_path.get<std::string>();
-	if (!std::filesystem::exists(std::filesystem::path(awpk_path_str).parent_path()))
+	if (std::filesystem::path(awpk_path_str).has_parent_path() && !std::filesystem::exists(std::filesystem::path(awpk_path_str).parent_path()))
 	{
 		std::filesystem::create_directory(std::filesystem::path(awpk_path_str).parent_path());
 	}
