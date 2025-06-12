@@ -16,3 +16,14 @@ target_link_libraries(awCoreTests PRIVATE awCore GTest::gtest_main)
 include(GoogleTest)
 
 gtest_discover_tests(awCoreTests)
+
+# Copy assets to binary dir
+if (IS_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/assets)
+    add_custom_command(TARGET awCoreTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:awCoreTests>/assets)
+    file(GLOB_RECURSE assetFiles assets/*.* LIST_DIRECTORIES ON)
+    foreach(assetFile ${assetFiles})
+        message(STATUS "Copying file ${assetFile} to tests directory")
+        get_filename_component(outFile ${assetFile} NAME)
+        add_custom_command(TARGET awCoreTests POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${assetFile} $<TARGET_FILE_DIR:awCoreTests>/assets/${outFile})
+    endforeach ()
+endif ()

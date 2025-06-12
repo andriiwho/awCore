@@ -25,3 +25,7 @@
 #include "aw/core/async/task_graph.h"
 
 #include "aw/core/filesystem/file.h"
+#include "aw/core/filesystem/virtual_file_system.h"
+#include "aw/core/filesystem/awpk.h"
+#include "aw/core/filesystem/awpk_vfs.h"
+#include "aw/core/filesystem/files_vfs.h"

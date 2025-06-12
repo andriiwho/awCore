@@ -1,13 +1,15 @@
 #include "aw/core/filesystem/file.h"
 
+#include "aw/core/filesystem/awpk.h"
 #include "aw/core/primitive/defer.h"
 
 #include <format>
+#include <sstream>
 
 namespace aw::core
 {
 
-	FileReader::FileReader(const std::string_view path, const bool binary)
+	DefaultFileReader::DefaultFileReader(const std::string_view path, const bool binary)
 		: m_Path(path)
 		, m_Stream(m_Path, (binary ? std::ios::binary : std::ios::in) | std::ios::ate)
 	{
@@ -21,11 +23,11 @@ namespace aw::core
 		m_Size = static_cast<usize>(pos);
 	}
 
-	FileReader::~FileReader()
+	DefaultFileReader::~DefaultFileReader()
 	{
 	}
 
-	std::string FileReader::read_all_to_string() const
+	std::string DefaultFileReader::read_all_to_string() const
 	{
 		std::string result;
 		result.resize(m_Size);
@@ -34,26 +36,62 @@ namespace aw::core
 		return result;
 	}
 
-	std::string FileReader::read_next_line() const
+	std::string DefaultFileReader::read_next_line() const
 	{
 		std::string out;
 		std::getline(m_Stream, out);
 		return out;
 	}
 
-	void FileReader::reset_pointer() const
+	void DefaultFileReader::reset_pointer() const
 	{
 		m_Stream.seekg(0, std::ios::beg);
 	}
 
-	std::vector<std::byte> FileReader::read_binary() const
+	std::vector<std::byte> DefaultFileReader::read_binary() const
 	{
 		std::vector<std::byte> result(m_Size);
 		m_Stream.read(reinterpret_cast<char*>(result.data()), m_Size);
 		return result;
 	}
 
-	FileWriter::FileWriter(const std::string_view path, const bool binary)
+	AwpkFileReader::AwpkFileReader(AwpkArchive* archive, std::string_view path)
+		: m_Archive(archive)
+		, m_Path(path)
+		, m_Bytes(awpk::extract_file(archive, path))
+	{
+	}
+
+	std::string AwpkFileReader::read_next_line() const
+	{
+		std::stringstream line{};
+		for (usize i = m_Offset; i < m_Bytes.size(); ++i)
+		{
+			while (static_cast<char>(m_Bytes[i]) != '\n')
+			{
+				line << static_cast<char>(m_Bytes[i]);
+				m_Offset++;
+			}
+		}
+		return line.str();
+	}
+
+	std::string AwpkFileReader::read_all_to_string() const
+	{
+		return std::string(reinterpret_cast<const char*>(m_Bytes.data()), m_Bytes.size());
+	}
+
+	void AwpkFileReader::reset_pointer() const
+	{
+		m_Offset = 0;
+	}
+
+	std::vector<std::byte> AwpkFileReader::read_binary() const
+	{
+		return m_Bytes;
+	}
+
+	DefaultFileWriter::DefaultFileWriter(const std::string_view path, const bool binary)
 		: m_Path(path)
 		, m_Stream(m_Path, binary ? std::ios::binary : std::ios::out)
 	{
@@ -63,24 +101,24 @@ namespace aw::core
 		}
 	}
 
-	FileWriter::~FileWriter()
+	DefaultFileWriter::~DefaultFileWriter()
 	{
 		m_Stream.flush();
 	}
 
-	void FileWriter::write_as_string(const std::string_view data) const
+	void DefaultFileWriter::write_as_string(const std::string_view data) const
 	{
 		m_Stream << data;
 	}
 
-	void FileWriter::write_as_binary(const void* data, const usize size) const
+	void DefaultFileWriter::write_as_binary(const void* data, const usize size) const
 	{
 		m_Stream.write(static_cast<const char*>(data), size);
 	}
 
 	std::string file::read_file_to_string(const std::string_view path)
 	{
-		return FileReader(path).read_all_to_string();
+		return DefaultFileReader(path).read_all_to_string();
 	}
 
 	std::future<std::string> file::read_file_to_string_async(std::string_view path, ThreadPool* thread_pool)
@@ -101,7 +139,7 @@ namespace aw::core
 
 	void file::write_file_from_string(const std::string_view path, const std::string_view data)
 	{
-		FileWriter(path).write_as_string(data);
+		DefaultFileWriter(path).write_as_string(data);
 	}
 
 	std::future<void> file::write_file_from_string_async(const std::string_view path, std::string_view data, ThreadPool* thread_pool)
@@ -122,7 +160,7 @@ namespace aw::core
 
 	std::vector<std::byte> file::read_file_to_binary(const std::string_view path)
 	{
-		return FileReader(path, true).read_binary();
+		return DefaultFileReader(path, true).read_binary();
 	}
 
 	std::future<std::vector<std::byte>> file::read_file_to_binary_async(const std::string_view path, ThreadPool* thread_pool)
@@ -143,7 +181,7 @@ namespace aw::core
 
 	void file::write_file_from_binary(const std::string_view path, const void* data, const usize size)
 	{
-		FileWriter(path, true).write_as_binary(data, size);
+		DefaultFileWriter(path, true).write_as_binary(data, size);
 	}
 
 	std::future<void> file::write_file_from_binary_async(std::string_view path, const void* data, usize size, ThreadPool* thread_pool)

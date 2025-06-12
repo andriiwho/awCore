@@ -14,7 +14,7 @@ namespace aw::core
 	class IFileStream
 	{
 	public:
-		virtual ~IFileStream();
+		virtual ~IFileStream() = default;
 
 		virtual std::string_view get_path() const = 0;
 
@@ -22,20 +22,30 @@ namespace aw::core
 		IFileStream() = default;
 	};
 
-	class FileReader final : public IFileStream
+	class IFileReader : public IFileStream
 	{
 	public:
-		FileReader(std::string_view path, bool binary = false);
-		~FileReader() override;
+		virtual usize get_size() const = 0;
+		virtual std::string read_next_line() const = 0;
+		virtual std::string read_all_to_string() const = 0;
+		virtual void reset_pointer() const = 0;
+		virtual std::vector<std::byte> read_binary() const = 0;
+	};
 
-		usize get_size() const { return m_Size; }
+	class DefaultFileReader final : public IFileReader
+	{
+	public:
+		DefaultFileReader(std::string_view path, bool binary = false);
+		~DefaultFileReader() override;
+
+		usize get_size() const override { return m_Size; }
 		std::string_view get_path() const override { return m_Path; }
 
-		std::string read_all_to_string() const;
-		std::string read_next_line() const;
-		void reset_pointer() const;
+		std::string read_all_to_string() const override;
+		std::string read_next_line() const override;
+		void reset_pointer() const override;
 
-		std::vector<std::byte> read_binary() const;
+		std::vector<std::byte> read_binary() const override;
 
 	private:
 		std::string m_Path;
@@ -44,16 +54,44 @@ namespace aw::core
 		usize m_Size = 0;
 	};
 
-	class FileWriter final : public IFileStream
+	class AwpkArchive;
+	class AwpkFileReader final : public IFileReader
 	{
 	public:
-		FileWriter(std::string_view path, bool binary = false);
-		~FileWriter() override;
+		AwpkFileReader(AwpkArchive* archive, std::string_view path);
+		std::string_view get_path() const override { return m_Path; }
+		usize get_size() const override { return m_Bytes.size(); }
+
+		std::string read_next_line() const override;
+		std::string read_all_to_string() const override;
+		void reset_pointer() const override;
+
+		std::vector<std::byte> read_binary() const override;
+
+	private:
+		AwpkArchive* m_Archive;
+		std::string_view m_Path;
+		std::vector<std::byte> m_Bytes;
+		mutable usize m_Offset = 0;
+	};
+
+	class IFileWriter : public IFileStream
+	{
+	public:
+		virtual void write_as_string(std::string_view data) const = 0;
+		virtual void write_as_binary(const void* data, usize size) const = 0;
+	};
+
+	class DefaultFileWriter final : public IFileWriter
+	{
+	public:
+		DefaultFileWriter(std::string_view path, bool binary = false);
+		~DefaultFileWriter() override;
 
 		std::string_view get_path() const override { return m_Path; }
 
-		void write_as_string(std::string_view data) const;
-		void write_as_binary(const void* data, usize size) const;
+		void write_as_string(std::string_view data) const override;
+		void write_as_binary(const void* data, usize size) const override;
 
 	private:
 		std::string m_Path;
@@ -73,5 +111,5 @@ namespace aw::core
 
 		void write_file_from_binary(std::string_view path, const void* data, usize size);
 		std::future<void> write_file_from_binary_async(std::string_view path, const void* data, usize size, ThreadPool* thread_pool = nullptr);
-	}
-}
+	} // namespace file
+} // namespace aw::core
