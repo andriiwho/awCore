@@ -1,6 +1,3 @@
-cmake_minimum_required(VERSION 3.10)
-project(CheckAVXSupport CXX)
-
 include(CheckCXXCompilerFlag)
 
 # Check AVX

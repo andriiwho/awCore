@@ -18,13 +18,4 @@ namespace aw::core
 
 	template <typename T, typename Allocator = DefaultAllocator<T>>
 	using Queue = std::queue<T, std::deque<T, Allocator>>;
-
-	template <typename CharType, typename CharTraits = std::char_traits<CharType>, typename Allocator = DefaultAllocator<CharType>>
-	using StringTemplate = std::basic_string<CharType, CharTraits, Allocator>;
-
-	using String = StringTemplate<char>;
-	using WideString = StringTemplate<wchar_t>;
-
-	using StringView = std::string_view;
-	using WideStringView = std::wstring_view;
 } // namespace aw::core
