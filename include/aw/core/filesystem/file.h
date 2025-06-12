@@ -8,6 +8,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include "aw/core/memory/intrusive_ref_counted.h"
 
 namespace aw::core
 {
