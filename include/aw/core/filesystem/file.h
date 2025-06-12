@@ -11,10 +11,10 @@
 
 namespace aw::core
 {
-	class IFileStream
+	class IFileStream : public IntrusiveRefCounted
 	{
 	public:
-		virtual ~IFileStream() = default;
+		~IFileStream() override = default;
 
 		virtual std::string_view get_path() const = 0;
 

@@ -4,4 +4,5 @@
 
 namespace aw::core
 {
+	IVirtualFileSystem* g_vfs = nullptr;
 } // namespace aw::core

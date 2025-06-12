@@ -23,4 +23,9 @@ namespace aw::core
 
 		virtual IFileReader* open_file_for_reading(std::string_view path) = 0;
 	};
+
+	extern IVirtualFileSystem* g_vfs;
 }
+
+#define aw_init_global_files_vfs() g_vfs = aw_new aw::core::FilesVFS()
+#define aw_init_global_awpk_vfs(awpk_path) g_vfs = aw_new aw::core::AwpkVFS(awpk_path)
