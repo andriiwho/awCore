@@ -1,9 +1,11 @@
-#include "../../../../include/aw/core/filesystem/files_vfs.h"
+#include "aw/core/filesystem/files_vfs.h"
 
 #include "aw/core/filesystem/file.h"
 
 #include <filesystem>
 #include <format>
+
+#include <nlohmann/json.hpp>
 
 namespace aw::core
 {
@@ -67,5 +69,24 @@ namespace aw::core
 	bool FilesVFS::file_exists(const std::string_view path) const
 	{
 		return std::filesystem::exists(resolve_path(path));
+	}
+
+	void FilesVFS::try_init_mappings_from_awpk_manifest()
+	{
+		if (std::filesystem::exists("awpk_manifest.json"))
+		{
+			std::string str = file::read_file_to_string("awpk_manifest.json");
+			const auto document = nlohmann::json::parse(str);
+			if (!document.contains("directory_mappings"))
+			{
+				return;
+			}
+
+			for (const auto directory_mappings = document["directory_mappings"];
+				const auto& [key, value] : directory_mappings.items())
+			{
+				map_path(key, value.get<std::string>());
+			}
+		}
 	}
 } // namespace aw::core
