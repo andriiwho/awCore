@@ -18,6 +18,8 @@ namespace aw::core
 		std::vector<std::string> list_files_in_mapped_directory(std::string_view path) const override;
 		IFileReader* open_file_for_reading(std::string_view path) override;
 
+		bool file_exists(std::string_view path) const override;
+
 	private:
 		AwpkArchive* m_Archive{};
 		std::unordered_map<std::string, std::string> m_Mappings;

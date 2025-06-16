@@ -35,4 +35,9 @@ namespace aw::core
 	{
 		return aw_new AwpkFileReader(m_Archive, path);
 	}
+
+	bool AwpkVFS::file_exists(const std::string_view path) const
+	{
+		return awpk::file_exists(m_Archive, path);
+	}
 } // namespace aw::core

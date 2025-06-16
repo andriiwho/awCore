@@ -49,8 +49,11 @@ namespace aw::core
 		std::vector<std::string> result;
 		for (const auto& entry : std::filesystem::recursive_directory_iterator(resolved_path))
 		{
-			const auto relative_path = std::filesystem::relative(entry.path(), resolved_path);
-			result.push_back(std::format("{}{}", path, relative_path.string()));
+			if (!entry.is_directory())
+			{
+				const auto relative_path = std::filesystem::relative(entry.path(), resolved_path);
+				result.push_back(std::format("{}{}", path, relative_path.string()));
+			}
 		}
 
 		return result;

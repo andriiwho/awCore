@@ -34,7 +34,7 @@ namespace aw::core
 		{
 		}
 
-		AwpkArchive(const std::string_view path)
+		explicit AwpkArchive(const std::string_view path)
 			: m_Path(path)
 			, m_IsWriting(false)
 		{
@@ -116,9 +116,9 @@ namespace aw::core
 			std::ostringstream data_stream{};
 
 			usize current_offset = sizeof(AwpkHeader);
-			for (auto& [mapping, path] : m_WriteFileMappings)
+			for (auto& [mapping, read_path] : m_WriteFileMappings)
 			{
-				std::ifstream in(path, std::ios::binary | std::ios::ate);
+				std::ifstream in(read_path, std::ios::binary | std::ios::ate);
 				if (!in.is_open())
 				{
 					throw std::runtime_error("Failed to open file for writing.");
