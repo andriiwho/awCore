@@ -26,9 +26,9 @@ namespace aw::core
 		return std::string(path);
 	}
 
-	std::vector<std::string> AwpkVFS::list_files_in_mapped_directory(std::string_view path) const
+	std::vector<std::string> AwpkVFS::list_files_in_mapped_directory(const std::string_view path) const
 	{
-		return awpk::list_files_in_archive(m_Archive);
+		return awpk::list_files_in_directory(m_Archive, path);
 	}
 
 	IFileReader* AwpkVFS::open_file_for_reading(const std::string_view path)

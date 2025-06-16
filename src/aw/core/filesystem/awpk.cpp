@@ -59,7 +59,7 @@ namespace aw::core
 				m_ReadMappings[entry.filename] = &entry;
 
 				std::string_view filename = entry.filename;
-				if (const auto pos = path.find(s_vfs_divider); pos != std::string_view::npos)
+				if (const auto pos = filename.find(s_vfs_divider); pos != std::string_view::npos)
 				{
 					const std::string_view mapping = filename.substr(0, pos + s_vfs_divider.length());
 					m_FilesPerDirectory[std::string(mapping)].push_back(&entry);
@@ -69,7 +69,9 @@ namespace aw::core
 
 		void add_file_for_write(const std::string_view mapping, const std::string_view path)
 		{
-			m_WriteFileMappings[std::string(mapping)] = std::string(path);
+			std::string file (mapping);
+			std::ranges::replace(file, '\\', '/');
+			m_WriteFileMappings[std::string(file)] = std::string(path);
 		}
 
 		std::vector<std::byte> extract_file(const std::string_view name)
