@@ -36,7 +36,7 @@ namespace aw::core
 	class DefaultFileReader final : public IFileReader
 	{
 	public:
-		DefaultFileReader(std::string_view path, bool binary = false);
+		explicit DefaultFileReader(std::string_view path, bool binary = false);
 		~DefaultFileReader() override;
 
 		usize get_size() const override { return m_Size; }

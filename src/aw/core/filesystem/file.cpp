@@ -8,7 +8,6 @@
 
 namespace aw::core
 {
-
 	DefaultFileReader::DefaultFileReader(const std::string_view path, const bool binary)
 		: m_Path(path)
 		, m_Stream(m_Path, (binary ? std::ios::binary : std::ios::in) | std::ios::ate)
@@ -29,11 +28,10 @@ namespace aw::core
 
 	std::string DefaultFileReader::read_all_to_string() const
 	{
-		std::string result;
-		result.resize(m_Size);
-		m_Stream.read(&result[0], m_Size);
+		std::stringstream stream;
+		stream << m_Stream.rdbuf();
 		reset_pointer();
-		return result;
+		return stream.str();
 	}
 
 	std::string DefaultFileReader::read_next_line() const
