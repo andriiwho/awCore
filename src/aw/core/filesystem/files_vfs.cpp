@@ -60,4 +60,9 @@ namespace aw::core
 	{
 		return aw_new DefaultFileReader(resolve_path(path));
 	}
+
+	bool FilesVFS::file_exists(const std::string_view path) const
+	{
+		return std::filesystem::exists(resolve_path(path));
+	}
 } // namespace aw::core

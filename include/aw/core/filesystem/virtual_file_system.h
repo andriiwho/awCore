@@ -22,6 +22,7 @@ namespace aw::core
 		virtual std::vector<std::string> list_files_in_mapped_directory(std::string_view path) const = 0;
 
 		virtual IFileReader* open_file_for_reading(std::string_view path) = 0;
+		virtual bool file_exists(std::string_view path) const = 0;
 	};
 
 	extern IVirtualFileSystem* g_vfs;

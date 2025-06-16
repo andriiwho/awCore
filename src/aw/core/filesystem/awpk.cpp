@@ -195,6 +195,16 @@ namespace aw::core
 			return out;
 		}
 
+		bool exists(const std::string_view path) const
+		{
+			if (m_IsWriting)
+			{
+				throw std::runtime_error("Failed to check if file exists. Archive is not open for reading.");
+			}
+
+			return m_ReadMappings.contains(path);
+		}
+
 	private:
 		std::string m_Path{};
 		std::ifstream m_AwpkStream{};
@@ -248,5 +258,10 @@ namespace aw::core
 	std::vector<std::string> awpk::list_files_in_directory(const AwpkArchive* archive, const std::string_view directory)
 	{
 		return archive->list_files(directory);
+	}
+
+	bool awpk::file_exists(const AwpkArchive* archive, const std::string_view name)
+	{
+		return archive->exists(name);
 	}
 } // namespace aw::core

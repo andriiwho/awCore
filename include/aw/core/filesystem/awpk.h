@@ -29,5 +29,7 @@ namespace aw::core
 		std::vector<std::string> list_files_in_archive(const AwpkArchive* archive);
 		std::vector<std::string> list_files_in_directory(const AwpkArchive* archive, std::string_view directory);
 
+		bool file_exists(const AwpkArchive* archive, std::string_view name);
+
 	} // namespace awpk
 } // namespace aw::core
