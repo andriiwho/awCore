@@ -23,6 +23,8 @@ namespace aw::core
 
 		virtual IFileReader* open_file_for_reading(std::string_view path) = 0;
 		virtual bool file_exists(std::string_view path) const = 0;
+
+		static std::string get_virtual_parent_path(std::string_view path);
 	};
 
 	extern IVirtualFileSystem* g_vfs;
