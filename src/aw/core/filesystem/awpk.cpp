@@ -8,6 +8,7 @@
 #include <sstream>
 #include <unordered_map>
 #include <mutex>
+#include <string.h>
 
 namespace aw::core
 {
