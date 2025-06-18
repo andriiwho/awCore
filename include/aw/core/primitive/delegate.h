@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <type_traits>
+#include <algorithm>
 
 namespace aw::core
 {
@@ -103,7 +104,7 @@ namespace aw::core
 				return;
 			}
 
-			if (const auto iter = std::ranges::find_if(m_Functions, [handler_object](const auto& func) { return func.handler == handler_object; });
+			if (const auto iter = std::find_if(m_Functions.begin(), m_Functions.end(), [handler_object](const auto& func) { return func.handler == handler_object; });
 				iter != m_Functions.end())
 			{
 				(*iter).handler = nullptr;
