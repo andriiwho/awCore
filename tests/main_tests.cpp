@@ -89,3 +89,34 @@ TEST(CoreTests, TestEnumFlags)
 	mask |= Flags::e;
 	EXPECT_TRUE(mask.contains(Flags::e));
 }
+
+TEST(CoreTests, TestDelegates)
+{
+	static DelegateVoid delegate;
+	static bool called = false;
+
+	class MockClass
+	{
+	public:
+		MockClass()
+		{
+			delegate.bind(this, &MockClass::called_from_delegate);
+		}
+
+		void called_from_delegate()
+		{
+			called = !called;
+		}
+	};
+	MockClass mock;
+	delegate.execute_safe();
+
+	EXPECT_TRUE(called);
+
+	using MulticastDelegateVoid = MulticastDelegate<>;
+	MulticastDelegateVoid multicast_delegate;
+	multicast_delegate.add(&mock, &MockClass::called_from_delegate);
+	multicast_delegate.execute_safe();
+
+	EXPECT_FALSE(called);
+}
