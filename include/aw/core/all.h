@@ -8,6 +8,7 @@
 #include "aw/core/primitive/macros.h"
 #include "aw/core/primitive/enum_flags.h"
 #include "aw/core/primitive/delegate.h"
+#include "aw/core/primitive/hash_combine.h"
 
 #include "aw/core/memory/memalloc.h"
 #include "aw/core/memory/allocators.h"
